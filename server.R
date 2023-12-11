@@ -8,19 +8,42 @@
 #
 
 library(shiny)
+library(ggplot2)
+library(dplyr)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+  
+  reactivePlot <- reactive({
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+        # generate plots based on input$plotType from ui.R
+        if (input$plotType == "Bar Plot"){
+          ggplot(data = sleep_data, aes(x = input$xVar)) +
+            geom_bar()
+        } else{
+          ggplot(data = sleep_data, aes(x = input$xVar, y = input$yVar)) + geom_boxplot()
+        }
 
     })
+    #Render the plot
+  output$myPlot <- renderPlot({
+    reactivePlot()
+  })
+    output$summaryType <- renderDataTable({
+      
+      # generate data tables based input$summaryType from ui.R
+      if (input$summaryType == "Contingency Table"){
+        table(sleep_data$Gender, sleep_data$Occupation)
+      } else if(input$summaryType == "Mean"){
+        tab <- sleep_data %>%
+          select("Gender", "BMI.Category", "Sleep.Duration") %>%
+          group_by(Gender, BMI.Category) %>%
+            summarize(mean = mean(Sleep.Duration))
+    } else{
+        sd(sleep_data$Sleep.Duration)
+      }
+        
+      }
+    )
 
 })
