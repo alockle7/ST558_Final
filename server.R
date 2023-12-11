@@ -13,22 +13,28 @@ library(dplyr)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  
-  reactivePlot <- reactive({
-
+  getData <- reactive({
+    newData <- sleep_data %>% filter(gender == input$gender)
+  })
+  #Render the plot
+  output$myPlot <- renderPlot({
+    xVar <-input$xVar
+    yVar <-input$yVar
         # generate plots based on input$plotType from ui.R
         if (input$plotType == "Bar Plot"){
-          ggplot(data = sleep_data, aes(x = input$xVar)) +
+          ggplot(data = sleep_data, aes_string(x = input$xVar)) +
             geom_bar()
-        } else{
-          ggplot(data = sleep_data, aes(x = input$xVar, y = input$yVar)) + geom_boxplot()
-        }
-
-    })
-    #Render the plot
-  output$myPlot <- renderPlot({
-    reactivePlot()
-  })
+        } else if (input$plotType == "Histogram"){
+          ggplot(data = sleep_data, aes_string(x = yVar)) +
+            geom_histogram()
+          } else if (input$plotType == "Scatter Plot"& input$Occupation){
+            ggplot(data = sleep_data, aes(x = Physical.Activity.Level, y = Sleep.Duration)) +
+                     geom_point(aes(col = Occupation))
+          } else if (input$plotType =="Scatter Plot"){
+            ggplot(data = sleep_data, aes(x = Physical.Activity.Level, y = Sleep.Duration)) +
+              geom_point()
+           } else ggplot(data = sleep_data, aes_string(x = input$xVar, y = input$yVar)) + geom_boxplot()
+        })
     output$summaryType <- renderDataTable({
       
       # generate data tables based input$summaryType from ui.R
