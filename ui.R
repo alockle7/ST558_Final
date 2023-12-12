@@ -10,9 +10,10 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
-#import data, save as R object and covert categorical variables to factors. 
-sleep_data <- read.csv("Sleep_health_and_lifestyle_dataset.csv")
+#import data. 
+sleep_data <- read.csv("https://raw.githubusercontent.com/alockle7/ST558_Final/main/Sleep_health_and_lifestyle_dataset.csv")
 
+#Save as R object and convert categorical variables to factors
 sleep_data$Gender <- as.factor(sleep_data$Gender)
 sleep_data$Occupation <- as.factor(sleep_data$Occupation)
 sleep_data$BMI.Category <-as.factor(sleep_data$BMI.Category)
