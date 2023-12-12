@@ -21,8 +21,10 @@ tags$head(
 #import data. 
 url <- "https://raw.githubusercontent.com/alockle7/ST558_Final/main/Sleep_health_and_lifestyle_dataset.csv"
 
-
+print(url)
 sleep_data <- read.csv(url)
+print(sleep_data)
+head(sleep_data)
 
 #Save as R object and convert categorical variables to factors
 sleep_data$Gender <- as.factor(sleep_data$Gender)
