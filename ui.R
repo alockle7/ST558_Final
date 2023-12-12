@@ -22,8 +22,10 @@ tags$head(
 url <- "https://raw.githubusercontent.com/alockle7/ST558_Final/main/Sleep_health_and_lifestyle_dataset.csv"
 
 print(url)
+
+sleep_data <-data.frame(matrix(ncol=375, nrow=13))
 sleep_data <- read.csv(url)
-print(sleep_data)
+#print(sleep_data)
 head(sleep_data)
 
 #Save as R object and convert categorical variables to factors
