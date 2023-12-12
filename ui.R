@@ -10,8 +10,18 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
+
+#Include MathJax librqary in header
+tags$head(
+  tags$script(
+    type = "text/javascript",
+    src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"
+  )
+)
 #import data. 
-sleep_data <- read.csv("https://raw.githubusercontent.com/alockle7/ST558_Final/main/Sleep_health_and_lifestyle_dataset.csv")
+url <- "https://raw.githubusercontent.com/alockle7/ST558_Final/main/Sleep_health_and_lifestyle_dataset.csv"
+
+sleep_data <- read.csv(url)
 
 #Save as R object and convert categorical variables to factors
 sleep_data$Gender <- as.factor(sleep_data$Gender)
@@ -81,14 +91,18 @@ shinyUI(fluidPage(
       tabPanel("Modeling",
                tabsetPanel(
                  tabPanel("Modeling Info",
-                          mainPanel("This app employs two types of predictive modeling; Mulitple Linear Regression and a Random Forest Model")
-                ),
+                          mainPanel(
+                            p("This app employs two types of predictive modeling; Mulitple Linear Regression and a Random Forest Model"),
+                            br(),
+                            p("Multiple linear regression is a statistical method used to model the relationship between multiple independent variables (predictors) and a single dependent variable (response). It is an extension of simple linear regression, which models the relationship between one independent variable and the dependent variable. In multiple linear regression, the goal is to estimate the coefficients of the linear equation that best describes the relationship between the variables."),
+                            HTML("The general form of the multiple linear regression model with \\(p\\) predictors (independent variables) is given by:")
+                          
+                )),
                  tabPanel("Model Fitting",
+                 ),
+                 tabPanel("Prediction"
                 ),
-                 tabPanel("Prediction",
-                ),
-               )
                )
     ),
 ))
-
+)

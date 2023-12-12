@@ -36,8 +36,8 @@ shinyServer(function(input, output) {
               geom_point()
            } else ggplot(data = sleep_data, aes_string(x = input$xVar, y = input$yVar)) + geom_boxplot()
         })
+  
     output$summaryType <- renderDataTable({
-      
       # generate data tables based input$summaryType from ui.R
       if (input$summaryType == "Contingency Table"){
         table(sleep_data$Gender, sleep_data$Occupation)
