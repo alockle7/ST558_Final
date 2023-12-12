@@ -21,7 +21,7 @@ shinyUI(fluidPage(
                sidebarLayout(
                  sidebarPanel(
                    p("The purpose of this app is to provide an interactive platform where the user can ivestigate the relationship between sleep, health, and lifestyle factors."),
-                   p("The dataset comes from", a("Kaggle.", href = "https://www.kaggle.com/datasets/uom190346a/sleep-health-and-lifestyle-dataset/data"),"It includes sleep metrics such as sleep duration and sleep disorders, lifestyle factors such as occupation, and health metrics such as BMI and heart rate measurements."
+                   p("The dataset comes from", a("Kaggle.", href = "https://www.kaggle.com/datasets/uom190346a/sleep-health-and-lifestyle-dataset/data"),"It includes sleep metrics such as sleep duration and sleep disorders, lifestyle factors such as occupation, and health metrics such as BMI and heart rate measurements. For the purpose of this project, the categorical variables were converted to factors."
                    ),
                    p("This app is separated in tabs, the first tab describes the dataset and purpose of this app, the second tab plots data based on user inputs, and the third tab allows the user to select inputs for predictive modeling.")
                    ),
@@ -71,15 +71,14 @@ shinyUI(fluidPage(
       tabPanel("Modeling",
                tabsetPanel(
                  tabPanel("Modeling Info",
-                          h3("Modeling Info"),
+                          mainPanel("This app employs two types of predictive modeling; Mulitple Linear Regression and a Random Forest Model")
                 ),
                  tabPanel("Model Fitting",
-                          h3("Model Fitting"),
                 ),
                  tabPanel("Prediction",
-                          h3("Prediction"),
                 ),
                )
                )
     ),
 ))
+
