@@ -13,13 +13,7 @@ library(dplyr)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  #import data, save as R object and covert categorical variables to factors. 
-  sleep_data <- read.csv("Sleep_health_and_lifestyle_dataset.csv")
-  
-  sleep_data$Gender <- as.factor(sleep_data$Gender)
-  sleep_data$Occupation <- as.factor(sleep_data$Occupation)
-  sleep_data$BMI.Category <-as.factor(sleep_data$BMI.Category)
-  sleep_data$Sleep.Disorder <-as.factor(sleep_data$Sleep.Disorder) 
+
   getData <- reactive({
     newData <- sleep_data %>% filter(gender == input$gender)
   })
