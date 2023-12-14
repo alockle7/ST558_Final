@@ -10,12 +10,14 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
+library(mathjaxr)
+library(caret)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
   getData <- reactive({
-    newData <- sleep_data %>% filter(gender == input$gender)
+    newData <- sleep_data %>% filter(Gender == input$gender)
   })
   #Render the plot
   output$myPlot <- renderPlot({
@@ -41,16 +43,38 @@ shinyServer(function(input, output) {
       # generate data tables based input$summaryType from ui.R
       if (input$summaryType == "Contingency Table"){
         table(sleep_data$Gender, sleep_data$Occupation)
-      } else if(input$summaryType == "Mean"){
+      } else {
         tab <- sleep_data %>%
-          select("Gender", "BMI.Category", "Sleep.Duration") %>%
+          select("Gender", "BMI.Category", "Quality.of.Sleep") %>%
           group_by(Gender, BMI.Category) %>%
-            summarize(mean = mean(Sleep.Duration))
-    } else{
-        sd(sleep_data$Sleep.Duration)
-      }
-        
+            summarize(mean = mean(Quality.of.Sleep))
+    }
       }
     )
 
+    output$modelfit <- renderPrint({
+      set.seed(55)
+      trctrl <-trainControl(method = "repeatedcv",
+                            number = 5,
+                            repeats = 3
+      )
+      if(input$modelType == "Generalized Linear Regression Model"){
+
+      modelfit <- train(Quality.of.Sleep ~., sleep_data, method = "glm",
+                      trControl = trctrl,
+                      preProcess = c("center", "scale"))
+      }else {modelfit <- train(Quality.of.Sleep ~., sleep_data, method = "rpart",
+                            trControl = trctrl,
+                            preProcess = c("center", "scale"))
+      } 
+      print(modelfit)
+    })
+    output$glmPred <- renderPrint({
+      glmPred <- as.numeric(predict(glmFit, test,
+                                      type = "prob")[,2] > 0.5)
+      confMatGLM <- confusionMatrix(as.factor(glmPred), 
+                                      as.factor(as.numeric(as.factor(test$sleep)) - 1),
+                                      positive = "1")
+      print(confMatGLM)
+    })
 })
